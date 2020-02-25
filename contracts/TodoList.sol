@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity >=0.4.20;
 
 contract TodoList {
   TodoItem[] public todoItems;
@@ -8,7 +8,7 @@ contract TodoList {
     bool active;
   }
 
-  function addTodoItem(bytes32 _value) returns (bool success) {
+  function addTodoItem(bytes32 _value) public   returns (bool success) {
     TodoItem memory todoItem;
     todoItem.value = _value;
     todoItem.active = false;
@@ -17,7 +17,7 @@ contract TodoList {
     return true;
   }
 
-  function getTodoItems() constant returns (bytes32[], bool[]) {
+  function getTodoItems() public view returns (bytes32[] memory, bool[] memory) {
     uint length = todoItems.length;
 
     bytes32[] memory values = new bytes32[](length);
@@ -31,15 +31,17 @@ contract TodoList {
     return (values, actives);
   }
 
-  function deleteTodoItem(uint index) returns (bool success) {
-    if (index >= todoItems.length) return;
+
+  function deleteTodoItem(uint index) public returns (bool success) {
+    if (index >= todoItems.length) return false;
 
     for (uint i = index; i < todoItems.length - 1; i++){
         todoItems[i] = todoItems[i+1];
     }
 
     delete todoItems[todoItems.length - 1];
-    todoItems.length--;
+    todoItems.length - 1;
     return true;
   }
 }
+
